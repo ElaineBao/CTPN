@@ -15,6 +15,9 @@ def draw_boxes(im, bboxes, is_display=True, color=None, caption="Image", wait=Tr
     """
         boxes: bounding boxes
     """
+    if len(bboxes) ==0:
+        return None
+
     im=im.copy()
     for box in bboxes:
         if color==None:

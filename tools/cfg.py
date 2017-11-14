@@ -1,6 +1,9 @@
 # MUST be imported firstly
 import sys
+
+import crnn.keys as keys
 import numpy as np
+
 
 class Config:
     MEAN=np.float32([102.9801, 115.9465, 122.7717])
@@ -18,6 +21,9 @@ class Config:
     MIN_V_OVERLAPS=0.7
     MIN_SIZE_SIM=0.7
     TEXT_PROPOSALS_WIDTH=16
+
+    TEXT_RECOG_ALPHABET = keys.alphabet
+    PLATFORM = "GPU"
 
 def init():
     sys.path.insert(0, "./tools")

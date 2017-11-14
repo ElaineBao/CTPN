@@ -1,4 +1,4 @@
-FROM nvidia/cuda:7.0-runtime-ubuntu14.04
+FROM nvidia/cuda:7.0-cudnn3-devel-ubuntu14.04
 MAINTAINER Varun Suresh <fab.varun@gmail.com>
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -37,23 +37,23 @@ RUN pip install --upgrade pip
 RUN pip install packaging
 
 RUN cd python && for req in $(cat requirements.txt) pydot; do pip install $req; done && cd ..
-RUN git clone https://github.com/NVIDIA/nccl.git
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    cuda=7.0-28
-WORKDIR /
+#RUN git clone https://github.com/NVIDIA/nccl.git
+#RUN apt-get update && apt-get install -y --no-install-recommends \
+#    cuda=7.0-28
+#WORKDIR /
 
 # Download the CUDA drivers from https://developer.nvidia.com/rdp/cudnn-archive and place it here  :
-ADD cudnn-7.0-linux-x64-v3.0.8-prod.tgz /
-WORKDIR /cuda
-RUN cp -P include/cudnn.h /usr/include
-RUN cp -P lib64/libcudnn* /usr/lib/x86_64-linux-gnu/
+#ADD cudnn-7.0-linux-x64-v3.0.8-prod.tgz /
+#WORKDIR /cuda
+#RUN cp -P include/cudnn.h /usr/include
+#RUN cp -P lib64/libcudnn* /usr/lib/x86_64-linux-gnu/
 
 WORKDIR $CTPN_ROOT/CTPN/caffe
 RUN cp Makefile.config.example Makefile.config
 RUN apt-get update && apt-get install -y --no-install-recommends \
     vim
-RUN cd nccl && make -j install && cd .. && rm -rf nccl && \
-    mkdir build && cd build && \
+#RUN cd nccl && make -j install && cd .. && rm -rf nccl && \
+RUN mkdir build && cd build && \
     cmake -DUSE_CUDNN=1 .. && \
     WITH_PYTHON_LAYER=1 make -j"$(nproc)" && make pycaffe
 
