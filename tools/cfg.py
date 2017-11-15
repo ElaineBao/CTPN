@@ -1,8 +1,12 @@
 # MUST be imported firstly
 import sys
-
-import crnn.keys as keys
 import numpy as np
+
+def init():
+    sys.path.insert(0, "./tools")
+    sys.path.insert(0, "./src")
+
+init()
 
 
 class Config:
@@ -21,12 +25,6 @@ class Config:
     MIN_V_OVERLAPS=0.7
     MIN_SIZE_SIM=0.7
     TEXT_PROPOSALS_WIDTH=16
-
+    import crnn.keys as keys
     TEXT_RECOG_ALPHABET = keys.alphabet
     PLATFORM = "GPU"
-
-def init():
-    sys.path.insert(0, "./tools")
-    sys.path.insert(0, "./caffe/python")
-    sys.path.insert(0, "./src")
-init()

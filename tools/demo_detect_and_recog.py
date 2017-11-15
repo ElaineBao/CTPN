@@ -1,5 +1,7 @@
 import argparse
 from cfg import Config as cfg
+# make sure torch is imported before caffe, otherwise there will be an error. This is due to pytorch internal error.
+from recognizers import TextRecognizer
 from other import draw_boxes, resize_im, CaffeModel
 import cv2, caffe
 from detectors import TextProposalDetector, TextDetector

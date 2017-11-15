@@ -73,7 +73,7 @@ RUN cp -r $CTPN_ROOT/CTPN/src/utils $CTPN_ROOT/CTPN/caffe/src/caffe/
 RUN cd ~ && \
     mkdir -p ocv-tmp && \
     cd ocv-tmp && \
-    wget https://github.com/Itseez/opencv/archive/2.4.12.zip  && \
+    wget https://github.com/opencv/opencv/archive/2.4.12.zip  && \
     unzip 2.4.12.zip && \
     cd opencv-2.4.12 && \
     mkdir release && \

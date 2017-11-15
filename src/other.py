@@ -1,4 +1,4 @@
-import cv2, caffe
+import cv2
 import numpy as np
 from matplotlib import cm
 
@@ -81,6 +81,7 @@ class Graph:
 
 class CaffeModel:
     def __init__(self, net_def_file, model_file):
+        import caffe
         self.net_def_file=net_def_file
         self.net=caffe.Net(net_def_file, model_file, caffe.TEST)
 

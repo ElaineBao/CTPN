@@ -61,7 +61,7 @@ def crnnRec_single(model,converter,im, use_Threshold=False):
    model.eval()
    preds = model(image, use_Threshold)
    vals, preds = preds.max(2)
-   preds = preds.squeeze(2)
+   #preds = preds.squeeze(2)
 
    # if use_Threshold:
    #     vals = vals.squeeze(2)
