@@ -1,6 +1,6 @@
 import argparse
 from cfg import Config as cfg
-from other import draw_boxes, resize_im, CaffeModel
+from other import draw_boxes, rank_boxes, resize_im, CaffeModel
 import cv2, caffe
 from detectors import TextProposalDetector, TextDetector
 from utils.timer import Timer
@@ -26,10 +26,13 @@ def text_detect(args, text_detector, image_path):
     print "Image: %s"%image_path
 
     im=cv2.imread(image_path)
-    im, f=resize_im(im, cfg.SCALE, cfg.MAX_SCALE)
+    im_small, f=resize_im(im, cfg.SCALE, cfg.MAX_SCALE)
 
     timer = Timer()
-    text_lines=text_detector.detect(im)
+    timer.tic()
+    text_lines=text_detector.detect(im_small)
+    text_lines=text_lines / f # project back to size of original image
+    text_lines=rank_boxes(text_lines)
     print "Number of the detected text lines: %s" % len(text_lines)
     print "Detection Time: %f" % timer.toc()
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
@@ -70,7 +73,7 @@ if __name__ == "__main__":
     text_detector = init_models(args)
     if args.image is not None:
         image_path = args.image
-        im, text_bboxes = text_detect(args, text_detector, image_path)
+        _, text_bboxes = text_detect(args, text_detector, image_path)
         if text_bboxes is not None:
             save_text_bboxes(text_bboxes, image_path)
     else:
@@ -78,6 +81,6 @@ if __name__ == "__main__":
             image_paths = f.readlines()
         for image_path in image_paths:
             image_path = image_path.strip()
-            im, text_bboxes = text_detect(args, text_detector, image_path)
+            _, text_bboxes = text_detect(args, text_detector, image_path)
             if text_bboxes is not None:
                 save_text_bboxes(text_bboxes, image_path)

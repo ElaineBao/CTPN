@@ -13,7 +13,7 @@ class Config:
     MEAN=np.float32([102.9801, 115.9465, 122.7717])
     TEST_GPU_ID=0
     SCALE=600
-    MAX_SCALE=1000
+    MAX_SCALE=3000  #if the image is quite "long", MAX_SCALE can be set to a large value to avoid over-resize
 
     LINE_MIN_SCORE=0.7
     TEXT_PROPOSALS_MIN_SCORE=0.7

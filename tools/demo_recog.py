@@ -2,7 +2,6 @@ import argparse
 from cfg import Config as cfg
 import cv2
 from utils.timer import Timer
-from other import resize_im
 from recognizers import TextRecognizer
 import sys
 reload(sys)
@@ -18,7 +17,6 @@ def text_recog(args, text_recognizer, text_lines, image_path):
     print "Image: %s" % image_path
 
     im = cv2.imread(image_path)
-    im, f = resize_im(im, cfg.SCALE, cfg.MAX_SCALE)
 
     timer.tic()
     predictions = text_recognizer.predict(im, text_lines)

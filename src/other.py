@@ -1,4 +1,5 @@
 import cv2
+import caffe
 import numpy as np
 from matplotlib import cm
 
@@ -47,6 +48,11 @@ def clip_boxes(boxes, im_shape):
     boxes[:, 1::2]=threshold(boxes[:, 1::2], 0, im_shape[0]-1)
     return boxes
 
+def rank_boxes(boxes):
+    def getKey(item):
+        return item[1] #sort by y1
+    sorted_boxes = sorted(boxes,key=getKey)
+    return sorted_boxes
 
 def normalize(data):
     if data.shape[0]==0:
@@ -81,7 +87,6 @@ class Graph:
 
 class CaffeModel:
     def __init__(self, net_def_file, model_file):
-        import caffe
         self.net_def_file=net_def_file
         self.net=caffe.Net(net_def_file, model_file, caffe.TEST)
 
