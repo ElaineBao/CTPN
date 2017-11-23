@@ -15,11 +15,12 @@ TODO:
 - batch up image filenames as well: don't want to load all of them into memory
 - come up with a batching scheme that preserved order / keeps a unique ID
 """
+import argparse
+import os
+import time
+
 import numpy as np
 import pandas as pd
-import os
-import argparse
-import time
 
 import caffe
 
@@ -46,7 +47,7 @@ def main(argv):
     parser.add_argument(
         "--model_def",
         default=os.path.join(pycaffe_dir,
-                "../models/bvlc_reference_caffenet/deploy.prototxt.prototxt"),
+                "../models/bvlc_reference_caffenet/deploy.prototxt"),
         help="Model definition file."
     )
     parser.add_argument(
@@ -116,9 +117,9 @@ def main(argv):
 
     # Make detector.
     detector = caffe.Detector(args.model_def, args.pretrained_model, mean=mean,
-            input_scale=args.input_scale, raw_scale=args.raw_scale,
-            channel_swap=channel_swap,
-            context_pad=args.context_pad)
+                              input_scale=args.input_scale, raw_scale=args.raw_scale,
+                              channel_swap=channel_swap,
+                              context_pad=args.context_pad)
 
     # Load input.
     t = time.time()

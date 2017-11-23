@@ -9,8 +9,7 @@
 #include "caffe/common.hpp"
 #include "caffe/layer_factory.hpp"
 #include "caffe/proto/caffe.pb.h"
-#include "caffe/util/device_alternate.hpp"
-#include "caffe/util/coords.hpp"
+#include "caffe/util/math_functions.hpp"
 
 /**
  Forward declare boost::thread instead of including boost/thread.hpp
@@ -19,8 +18,6 @@
 namespace boost { class mutex; }
 
 namespace caffe {
-
-template <typename Dtype> class Net;
 
 /**
  * @brief An interface for the units of computation which can be composed into a
@@ -75,14 +72,6 @@ class Layer {
     Reshape(bottom, top);
     SetLossWeights(top);
   }
-
-  virtual DiagonalAffineMap<Dtype> coord_map() {
-    NOT_IMPLEMENTED;
-    // suppress warnings
-    return DiagonalAffineMap<Dtype>(vector<pair<Dtype, Dtype> >());
-  }
-
-  void set_net(Net<Dtype>* net) { net_ = net; }
 
   /**
    * @brief Does layer-specific setup: your layer should implement this function
@@ -327,7 +316,6 @@ class Layer {
     param_propagate_down_[param_id] = value;
   }
 
-  inline Phase phase() { return phase_; }
 
  protected:
   /** The protobuf that stores the layer parameters */
@@ -342,8 +330,6 @@ class Layer {
   /** The vector that indicates whether each top blob has a non-zero weight in
    *  the objective function. */
   vector<Dtype> loss_;
-
-  Net<Dtype>* net_;
 
   /** @brief Using the CPU device, compute the layer output. */
   virtual void Forward_cpu(const vector<Blob<Dtype>*>& bottom,

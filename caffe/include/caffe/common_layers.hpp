@@ -7,10 +7,11 @@
 
 #include "caffe/blob.hpp"
 #include "caffe/common.hpp"
-#include "caffe/data_layers.hpp"
+#include "caffe/layers/base_data_layer.hpp"
 #include "caffe/layer.hpp"
-#include "caffe/loss_layers.hpp"
-#include "caffe/neuron_layers.hpp"
+#include "caffe/layers/loss_layer.hpp"
+//#include "caffe/neuron_layers.hpp"
+#include "caffe/util/coords.hpp"
 #include "caffe/proto/caffe.pb.h"
 
 namespace caffe {

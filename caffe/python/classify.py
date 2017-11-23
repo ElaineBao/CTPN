@@ -4,12 +4,13 @@ classify.py is an out-of-the-box image classifer callable from the command line.
 
 By default it configures and runs the Caffe reference ImageNet model.
 """
-import numpy as np
-import os
-import sys
 import argparse
 import glob
+import os
+import sys
 import time
+
+import numpy as np
 
 import caffe
 
@@ -105,9 +106,9 @@ def main(argv):
 
     # Make classifier.
     classifier = caffe.Classifier(args.model_def, args.pretrained_model,
-            image_dims=image_dims, mean=mean,
-            input_scale=args.input_scale, raw_scale=args.raw_scale,
-            channel_swap=channel_swap)
+                                  image_dims=image_dims, mean=mean,
+                                  input_scale=args.input_scale, raw_scale=args.raw_scale,
+                                  channel_swap=channel_swap)
 
     # Load numpy array (.npy), directory glob (*.jpg), or image file.
     args.input_file = os.path.expanduser(args.input_file)

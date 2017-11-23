@@ -24,11 +24,18 @@ void Blob<Dtype>::Reshape(const vector<int>& shape) {
   CHECK_LE(shape.size(), kMaxBlobAxes);
   count_ = 1;
   shape_.resize(shape.size());
+  if (!shape_data_ || shape_data_->size() < shape.size() * sizeof(int)) {
+    shape_data_.reset(new SyncedMemory(shape.size() * sizeof(int)));
+  }
+  int* shape_data = static_cast<int*>(shape_data_->mutable_cpu_data());
   for (int i = 0; i < shape.size(); ++i) {
     CHECK_GE(shape[i], 0);
-    CHECK_LE(shape[i], INT_MAX / count_) << "blob size exceeds INT_MAX";
+    if (count_ != 0) {
+      CHECK_LE(shape[i], INT_MAX / count_) << "blob size exceeds INT_MAX";
+    }
     count_ *= shape[i];
     shape_[i] = shape[i];
+    shape_data[i] = shape[i];
   }
   if (count_ > capacity_) {
     capacity_ = count_;
@@ -65,6 +72,12 @@ Blob<Dtype>::Blob(const vector<int>& shape)
   // capacity_ must be initialized before calling Reshape
   : capacity_(0) {
   Reshape(shape);
+}
+
+template <typename Dtype>
+const int* Blob<Dtype>::gpu_shape() const {
+  CHECK(shape_data_);
+  return (const int*)shape_data_->gpu_data();
 }
 
 template <typename Dtype>
@@ -396,26 +409,6 @@ bool Blob<Dtype>::ShapeEquals(const BlobProto& other) {
     other_shape[i] = other.shape().dim(i);
   }
   return shape_ == other_shape;
-}
-
-template <typename Dtype>
-bool Blob<Dtype>::CountEquals(const BlobProto& other) {
-  if (other.has_num() || other.has_channels() ||
-      other.has_height() || other.has_width()) {
-    // Using deprecated 4D Blob dimensions --
-    // shape is (num, channels, height, width).
-    // Note: we do not use the normal Blob::num(), Blob::channels(), etc.
-    // methods as these index from the beginning of the blob shape, where legacy
-    // parameter blobs were indexed from the end of the blob shape (e.g., bias
-    // Blob shape (1 x 1 x 1 x N), IP layer weight Blob shape (1 x 1 x M x N)).
-    return shape_.size() <= 4 &&
-           count() == other.num() * other.channels() *other.height() * other.width();
-  }
-  int other_count=1;
-  for (int i = 0; i < other.shape().dim_size(); ++i) {
-    other_count *= other.shape().dim(i);
-  }
-  return count() == other_count;
 }
 
 template <typename Dtype>

@@ -67,22 +67,9 @@ void caffe_div(const int N, const Dtype* a, const Dtype* b, Dtype* y);
 template <typename Dtype>
 void caffe_powx(const int n, const Dtype* a, const Dtype b, Dtype* y);
 
+// added for CTPN
 template <typename Dtype>
-void caffe_sigmoid(const int N, const Dtype* x, Dtype* y);
-
-template <typename Dtype>
-void caffe_sigmoid_diff(const int N, const Dtype* y, const Dtype* y_diff, 
-    Dtype* x_diff);
-
-template <typename Dtype>
-void caffe_tanh(const int N, const Dtype* x, Dtype* y);
-
-template <typename Dtype>
-void caffe_tanh_diff(const int N, const Dtype* y, const Dtype* y_diff, 
-    Dtype* x_diff);
-
-template <typename Dtype>
-void caffe_bound(const int n, const Dtype* a, const Dtype min, 
+void caffe_bound(const int n, const Dtype* a, const Dtype min,
     const Dtype max, Dtype* y);
 
 unsigned int caffe_rng_rand();
@@ -113,32 +100,11 @@ template <typename Dtype>
 void caffe_abs(const int n, const Dtype* a, Dtype* y);
 
 template <typename Dtype>
-void caffe_gpu_sigmoid(const int N, const Dtype* x, Dtype* y);
-
-template <typename Dtype>
-void caffe_gpu_sigmoid_diff(const int N, const Dtype* y, const Dtype* y_diff, 
-    Dtype* x_diff);
-
-template <typename Dtype>
-void caffe_gpu_tanh(const int N, const Dtype* x, Dtype* y);
-
-template <typename Dtype>
-void caffe_gpu_tanh_diff(const int N, const Dtype* y, const Dtype* y_diff, 
-    Dtype* x_diff);
-
-template <typename Dtype>
-void caffe_gpu_bound(const int n, const Dtype* a, const Dtype min, 
-    const Dtype max, Dtype* y);
-
-template <typename Dtype>
 Dtype caffe_cpu_dot(const int n, const Dtype* x, const Dtype* y);
 
 template <typename Dtype>
 Dtype caffe_cpu_strided_dot(const int n, const Dtype* x, const int incx,
     const Dtype* y, const int incy);
-
-template <typename Dtype>
-int caffe_cpu_hamming_distance(const int n, const Dtype* x, const Dtype* y);
 
 // Returns the sum of the absolute values of the elements of vector x
 template <typename Dtype>
@@ -269,10 +235,6 @@ void caffe_gpu_rng_bernoulli(const int n, const Dtype p, int* r);
 
 template <typename Dtype>
 void caffe_gpu_dot(const int n, const Dtype* x, const Dtype* y, Dtype* out);
-
-template <typename Dtype>
-uint32_t caffe_gpu_hamming_distance(const int n, const Dtype* x,
-                                    const Dtype* y);
 
 template <typename Dtype>
 void caffe_gpu_asum(const int n, const Dtype* x, Dtype* y);

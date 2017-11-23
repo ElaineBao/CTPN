@@ -1,21 +1,22 @@
-import os
-import time
 import cPickle
+import cStringIO as StringIO
 import datetime
 import logging
-import flask
-import werkzeug
 import optparse
-import tornado.wsgi
-import tornado.httpserver
-import numpy as np
-import pandas as pd
-from PIL import Image
-import cStringIO as StringIO
+import os
+import time
 import urllib
-import exifutil
 
 import caffe
+import flask
+import numpy as np
+import pandas as pd
+import tornado.httpserver
+import tornado.wsgi
+import werkzeug
+from PIL import Image
+
+import exifutil
 
 REPO_DIRNAME = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) + '/../..')
 UPLOAD_FOLDER = '/tmp/caffe_demos_uploads'
