@@ -1,8 +1,8 @@
 import argparse
 from cfg import Config as cfg
-import cv2
 from utils.timer import Timer
 from recognizers import TextRecognizer
+import cv2
 import sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
