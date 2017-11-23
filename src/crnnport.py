@@ -1,8 +1,6 @@
 #coding:utf-8
 import crnn.crnn as crnn
 import crnn.util as util
-import cv2
-import numpy as np
 import torch
 import torch.utils.data
 import torchvision.transforms as transforms
@@ -34,17 +32,17 @@ def crnnSource(net_path, alphabet):
     else:
         model = crnn.CRNN(32, 1, len(alphabet) + 1, 256, 1)
         model.load_state_dict(torch.load(net_path, map_location=lambda storage, loc: storage))
-#    models.load_state_dict(torch.load(net_path))
+
     return model,converter
 
 
 def crnnRec_single(model,converter,im, use_Threshold=False):
    image = Image.fromarray(im).convert('L')
-   npimg = np.array(image)
+   #npimg = np.array(image)
    #if config.RECOGNITION.BINARY_IMAGE:
-   _, npimg = cv2.threshold(npimg, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+   #_, npimg = cv2.threshold(npimg, 127, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
    #if config.RECOGNITION.INVERT_COLOR_IMAGE:
-   image = Image.fromarray(255 - npimg)
+   #image = Image.fromarray(255 - npimg)
    scale = image.size[1]*1.0 / 32
    w = image.size[0] / scale
    w = int(w)

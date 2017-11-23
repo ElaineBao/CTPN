@@ -1,6 +1,6 @@
 import argparse
 from cfg import Config as cfg
-from other import draw_boxes, rank_boxes, resize_im, CaffeModel
+from other import draw_boxes, rank_boxes, resize_im, refine_boxes, CaffeModel
 import cv2, caffe
 from detectors import TextProposalDetector, TextDetector
 from utils.timer import Timer
@@ -21,7 +21,6 @@ def init_models(args):
 
 def text_detect(args, text_detector, image_path):
 
-    timer=Timer()
     print "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     print "Image: %s"%image_path
 
@@ -32,6 +31,7 @@ def text_detect(args, text_detector, image_path):
     timer.tic()
     text_lines=text_detector.detect(im_small)
     text_lines=text_lines / f # project back to size of original image
+    text_lines = refine_boxes(im, text_lines)
     text_lines=rank_boxes(text_lines)
     print "Number of the detected text lines: %s" % len(text_lines)
     print "Detection Time: %f" % timer.toc()
@@ -50,7 +50,7 @@ def save_text_bboxes(text_lines, image_path):
     with open(text_file,'w') as f:
         for rect in text_lines:
             for coord in rect:
-                f.write('%f\t'%coord)
+                f.write('%d\t'%coord)
             f.write('\n')
 
 

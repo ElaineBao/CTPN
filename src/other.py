@@ -54,6 +54,45 @@ def rank_boxes(boxes):
     sorted_boxes = sorted(boxes,key=getKey)
     return sorted_boxes
 
+def refine_boxes(im, boxes, expand_pixel_len = 10, pixel_blank = 2):
+    im_gray = cv2.cvtColor(im, cv2.COLOR_BGR2GRAY)
+    ret, im_binary = cv2.threshold(im_gray, 150,255, cv2.THRESH_BINARY_INV)
+    boxes_new = []
+    for bbox in boxes:
+        x1 = int(np.floor(bbox[0]))
+        y1 = int(np.floor(bbox[1]))
+        x2 = int(np.ceil(bbox[2]))
+        y2 = int(np.ceil(bbox[3]))
+        x1_ex = max(x1 - expand_pixel_len, 0)
+        x2_ex = min(x2 + expand_pixel_len, im_binary.shape[0] - 1)
+        im_chip = im_binary[y1:y2, x1_ex:x2_ex]
+        if im_chip[0,-1] == 255:  # remove useless texts (with black background)
+            continue
+
+        contours, hierarchy = find_contours(im_chip)
+        if len(contours) == 0:
+            continue #boxes_new.append([x1,y1,x2,y2])
+
+        xmin = 100000000000
+        xmax = 0
+        for cnt in contours:
+            x,y,w,h = cv2.boundingRect(cnt)
+            if x < xmin:
+                xmin = x
+            if x+w > xmax:
+                xmax = x+w
+        x1_new = max(x1_ex+xmin-pixel_blank, 0)
+        x2_new = min(x1_ex+xmax+pixel_blank,im_binary.shape[0]-1)
+        boxes_new.append([x1_new,y1,x2_new,y2])
+    return boxes_new
+
+def find_contours(img, mode=cv2.RETR_EXTERNAL, method=cv2.CHAIN_APPROX_SIMPLE):
+    if cv2.__version__[0] == '2':
+        contours2, hierarchy2 = cv2.findContours(img.copy(), mode, method)
+    elif cv2.__version__[0] == '3':
+        _, contours2, hierarchy2 = cv2.findContours(img.copy(), mode, method)
+    return contours2, hierarchy2
+
 def normalize(data):
     if data.shape[0]==0:
         return data

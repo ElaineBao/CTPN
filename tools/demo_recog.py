@@ -50,7 +50,7 @@ def parse_args():
     parser.add_argument('--image', help='input image', default=None, type=str)
     parser.add_argument('--imagelist', help='input image list', default=None, type=str)
     parser.add_argument('--RECOG_MODEL_FILE', help='pytorch model for text recognition net',
-                        default="models/idcard_addr_10.pth", type=str)
+                        default="models/netCRNN63.pth", type=str)
     args = parser.parse_args()
     return args
 
