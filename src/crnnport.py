@@ -28,6 +28,7 @@ def crnnSource(net_path, alphabet):
 
     if cfg.PLATFORM == "GPU":
         model = crnn.CRNN(32, 1, len(alphabet) + 1, 256, 1).cuda()
+        model = torch.nn.DataParallel(model, device_ids=range(1))
         model.load_state_dict(torch.load(net_path))
     else:
         model = crnn.CRNN(32, 1, len(alphabet) + 1, 256, 1)

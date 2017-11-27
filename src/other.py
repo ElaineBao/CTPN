@@ -66,6 +66,8 @@ def refine_boxes(im, boxes, expand_pixel_len = 10, pixel_blank = 2):
         x1_ex = max(x1 - expand_pixel_len, 0)
         x2_ex = min(x2 + expand_pixel_len, im_binary.shape[0] - 1)
         im_chip = im_binary[y1:y2, x1_ex:x2_ex]
+        if im_chip.size == 0:
+            continue
         if im_chip[0,-1] == 255:  # remove useless texts (with black background)
             continue
 
